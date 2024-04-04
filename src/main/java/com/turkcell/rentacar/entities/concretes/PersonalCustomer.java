@@ -1,7 +1,7 @@
 package com.turkcell.rentacar.entities.concretes;
 
 import com.turkcell.rentacar.core.entities.BaseCustomerEntitity;
-
+import com.turkcell.rentacar.core.entities.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name="personalCustomers")
-public class PersonalCustomer extends BaseCustomerEntitity{
+public class PersonalCustomer extends BaseCustomerEntitity {
 
 	@Column(name = "firstName")
 	private String firstName;
@@ -26,8 +26,11 @@ public class PersonalCustomer extends BaseCustomerEntitity{
 	private String lastName;
 
 	@Column(name ="nationalId")
-	private String nationalId;
+	private String nationalNumber;
 
 	@OneToMany(mappedBy = "personalCustomer")
 	private List<Rental> rentals;
+
+	@OneToMany(mappedBy = "personalCustomer")
+	private List<Payment> creditCards;
 }

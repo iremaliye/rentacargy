@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 @AllArgsConstructor
 @Service
 public class PersonCustomerManager implements PersonCustomerService {
@@ -24,9 +26,9 @@ public class PersonCustomerManager implements PersonCustomerService {
 
     @Override
     public CreatedPersonCustomerResponse add(CreatePersonCustomerRequest createPersonCustomerRequest) {
-        this.personCustomerBusinessRules.nationalIdCanNotBeDuplicated(createPersonCustomerRequest.getNationalId());
+        this.personCustomerBusinessRules.nationalIdCanNotBeDuplicated(createPersonCustomerRequest.getNationalNumber());
         PersonalCustomer personalCustomer =this.modelMapperService.forRequest().map(createPersonCustomerRequest,PersonalCustomer.class);
-        personalCustomer.setNationalId(createPersonCustomerRequest.getNationalId());
+        personalCustomer.setNationalNumber(createPersonCustomerRequest.getNationalNumber());
         personalCustomer.setCreatedDate(LocalDateTime.now());
         PersonalCustomer createdPersonalCustomer=this.personCustomerRepository.save(personalCustomer);
 
@@ -60,7 +62,7 @@ public class PersonCustomerManager implements PersonCustomerService {
         existsPersonCustomer.setUpdatedDate(LocalDateTime.now());
         PersonalCustomer updatedPersonCustomer=this.personCustomerRepository.save(existsPersonCustomer);
 
-        UpdatedPersonCustomerResponse updatedPersonCustomerResponse=this.modelMapperService.forResponse().map(existsPersonCustomer,UpdatedPersonCustomerResponse.class);
+        UpdatedPersonCustomerResponse updatedPersonCustomerResponse=this.modelMapperService.forResponse().map(updatedPersonCustomer,UpdatedPersonCustomerResponse.class);
         return updatedPersonCustomerResponse;
 
     }
@@ -76,4 +78,11 @@ public class PersonCustomerManager implements PersonCustomerService {
 		PersonalCustomer personalCustomer =this.personCustomerRepository.findById(id).get();
 		return personalCustomer;
 	}
+
+    @Override
+    public Optional<PersonalCustomer> getByNationalNumberForPayment(String nationalNumber) {
+        Optional<PersonalCustomer> personalCustomer =this.personCustomerRepository.findByNationalNumber(nationalNumber);
+        return personalCustomer;
+    }
+
 }

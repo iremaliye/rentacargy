@@ -13,7 +13,7 @@ public class UpdatedPersonCustomerResponse {
 	private int id;
 	private String firstName;
 	private String lastName;
-	private String nationalId;
+	private String nationalNumber;
 	private LocalDateTime createdDate;
 	private LocalDateTime updatedDate;
 }
